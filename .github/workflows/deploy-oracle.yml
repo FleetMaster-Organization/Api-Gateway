@@ -1,0 +1,24 @@
+name: Deploy gateway to Oracle Free Tier
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy gateway to Oracle Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.ORACLE_HOST_IP }}
+          username: ${{ secrets.ORACLE_USERNAME }}
+          key: ${{ secrets.ORACLE_SSH_KEY }}
+          script: |
+            cd ~/proyecto-web/gateway
+            git pull origin master
+            
+            cd ~/proyecto-web
+            docker-compose up -d --build gateway
