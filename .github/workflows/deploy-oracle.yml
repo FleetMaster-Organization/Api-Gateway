@@ -13,9 +13,9 @@ jobs:
       - name: Deploy gateway to Oracle Server
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.ORACLE_HOST_IP }}
-          username: ${{ secrets.ORACLE_USERNAME }}
-          key: ${{ secrets.ORACLE_SSH_KEY }}
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/proyecto-web/gateway
             git pull origin master
