@@ -17,8 +17,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/proyecto-web/gateway
+            cd ~/proyecto-web/Api-Gateway
             git pull origin master
             
             cd ~/proyecto-web
-            docker-compose up -d --build gateway
+            docker compose up -d --build api-gateway
