@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
-import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions.stripPrefix;
 import static org.springframework.cloud.gateway.server.mvc.filter.LoadBalancerFilterFunctions.lb;
 
 /**
@@ -76,7 +75,6 @@ public class GatewayConfig {
         return GatewayRouterFunctions.route("assignment-service")
                 .route(request -> request.path().startsWith("/assignments"),
                         HandlerFunctions.http())
-                .filter(stripPrefix(1))
                 .filter(lb("assignement-services"))
                 .build();
     }
