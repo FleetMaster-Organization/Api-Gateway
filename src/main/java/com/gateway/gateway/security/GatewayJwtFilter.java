@@ -25,6 +25,8 @@ import java.util.List;
  * Rutas públicas (sin token):
  *  - POST /auth/login
  *  - POST /auth/refresh
+ *  - Documentación Swagger / OpenAPI (/swagger-ui, /v3/api-docs, ...)
+ *  - Endpoints de Actuator (/actuator/**) para health checks y Prometheus
  *
  * Rutas autenticadas (cualquier rol válido):
  *  - POST /auth/logout
@@ -79,7 +81,24 @@ public class GatewayJwtFilter extends OncePerRequestFilter {
 
     private boolean isPublicRoute(String path, String method) {
         return (path.equals("/auth/login")   && method.equals("POST")) ||
-                (path.equals("/auth/refresh") && method.equals("POST"));
+                (path.equals("/auth/refresh") && method.equals("POST")) ||
+                isDocsOrMonitoringRoute(path);
+    }
+
+    /**
+     * Rutas de documentación y monitoreo que deben ser accesibles sin token,
+     * tanto en la propia Gateway como en cualquier microservicio enrutado
+     * (ej: /alert-services/actuator/health vía discovery locator).
+     *
+     * Usamos contains() porque al reenviar vía Eureka el path puede llevar
+     * el prefijo del servicio antes del segmento real.
+     */
+    private boolean isDocsOrMonitoringRoute(String path) {
+        return path.contains("/actuator")
+                || path.contains("/swagger-ui")
+                || path.contains("/v3/api-docs")
+                || path.contains("/swagger-resources")
+                || path.contains("/webjars");
     }
 
     private boolean isAuthorized(String path, List<String> roles) {
