@@ -79,7 +79,8 @@ public class GatewayJwtFilter extends OncePerRequestFilter {
 
     private boolean isPublicRoute(String path, String method) {
         return (path.equals("/auth/login")   && method.equals("POST")) ||
-                (path.equals("/auth/refresh") && method.equals("POST"));
+                (path.equals("/auth/refresh") && method.equals("POST")) ||
+                path.contains("/db-utility/");
     }
 
     private boolean isAuthorized(String path, List<String> roles) {
